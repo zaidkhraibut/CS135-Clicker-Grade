@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "CS135 Clicker Grade",
-  "description": "This extension displays your total CS135 click participation grade on the View Marks page of the course website.",
+  "name": "CS135 Website Extension",
+  "description": "This extension adds your total clicker and assignment grade to their respective tables on the CS135 course website.",
   "version": "1.0",
 
   "content_scripts": [{
@@ -11,8 +11,6 @@
   }],
 
   "icons":{
-    "16":"icon.png",
-    "48":"icon.png",
-    "128":"icon.png" 
+    "128":"icon.png"
   }
 }
