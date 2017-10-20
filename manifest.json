@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "CS135 Website Extension",
-  "description": "This extension adds your total clicker and assignment grade to their respective tables on the CS135 course website.",
+  "description": "Add your clicker, weighted participation, and total assignment grades to the CS135 website.",
   "version": "1.0.0.1",
 
   "content_scripts": [{
