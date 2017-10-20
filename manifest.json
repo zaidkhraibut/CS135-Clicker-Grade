@@ -3,7 +3,7 @@
 
   "name": "CS135 Website Extension",
   "description": "This extension adds your total clicker and assignment grade to their respective tables on the CS135 course website.",
-  "version": "1.0",
+  "version": "1.0.0.1",
 
   "content_scripts": [{
     "js": ["content.js"],
