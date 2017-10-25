@@ -27,7 +27,6 @@ var clickerMarksRow = clickerTableRows[1];
 var assTable = tables[2];
 var assTableRows = assTable.getElementsByTagName("tr");
 
-
 // Parses clickerMarksRow for marks, converts string of each cell to Int, used
 //   toFixed(2) to return percentage at 2 decimal places
 var clickerMarks = clickerTable.getElementsByTagName("td");
@@ -62,20 +61,36 @@ var midterms = Symbol("Midterms");
 var mark = 0;
 var numOf = 0;
 var numOfAss = 0;
-var numOfMT = 0;
+var MT1weight = .1;
+var MT2weight = .2;
+var twoMidterms = false;
+
 
 // Adds together the marks on a row that begins with a specific letter. Updates
-//   numOf to keep track of # of assessments.
+//   numOf to keep track of # of assessments. Manipulates midterm mark depending
+//   on the weight of the midterm
 // startsWithLetter should be "M" or "A" for midterm or assignment
+
 function collectMarks(row, startsWithLetter) {
   if (assTableRows[row].getElementsByTagName("td")[0].innerHTML.startsWith(startsWithLetter)) {
     mark = parseFloat(assTableRows[row].getElementsByTagName("td")[2].innerHTML);
     numOf++;
+    if (startsWithLetter == "M") {
+      if (assTableRows[row].getElementsByTagName("td")[0].innerHTML.endsWith("1")) {
+        mark = mark * MT1weight;
+      } else {
+        mark = mark * MT2weight;
+        twoMidterms = true;
+      }
+    }
+  } else {
+    mark = 0;
   }
 }
 
+
 // Adds together assignment or midterm marks.
-// Takes the variables assignments, midterms
+// type must be the variable assignments or midterms
 function getMarksFn(row, type) {
   if (row >= assTableRows.length) {
     return 0;
@@ -84,30 +99,40 @@ function getMarksFn(row, type) {
       numOfAss = numOf;
   } else if (type == midterms) {
       collectMarks(row, "M");
-      numOfMT = numOf;
   }
   return mark + getMarksFn((row + 1), type);
 }
 
-// Wrapper function for getMarksFn to start counting from the start of marks
+
+// Wrapper function for getMarksFn to start counting from the correct row
 function getMarks(type) {
   return getMarksFn(2, type);
 }
 
-// Collectsvtotal number of marks earned and divides by number of that type
+
+// Collects total number of marks earned and divides by number of that type
 //   of assessment to make a final grade, rounded to 2 decimal places.
-totalAssMarks = getMarks(assignments);
+var totalAssMarks = getMarks(assignments);
 var finalAssGrade = totalAssMarks/numOfAss;
 finalAssGrade = finalAssGrade.toFixed(2);
 
-totalMTMarks = getMarks(midterms);
-var finalMidtermGrade = totalMTMarks/numOfMT;
-finalMidtermGrade = finalMidtermGrade.toFixed(2);
+// Determines midterm average using midterm weights
+var finalMTMark = 0;
+if (twoMidterms == true) {
+  finalMTMark = getMarks(midterms);
+  finalMTMark = finalMTMark/(MT1weight + MT2weight);
+} else {
+  finalMTMark = getMarks(midterms);
+  finalMTMark = finalMTMark/MT1weight;
+}
+finalMTMark = finalMTMark.toFixed(2);
 
 // Finds body of "Other Marks" table
 var assTableBody = assTable.getElementsByTagName("tbody")[0];
-// Contents to go inside of <tr> tags that will be appended to assTableBody
-var midtermTotalText = "<td><strong>Midterm Avg.</strong></td><td><strong>100</strong></td><td><strong>"+finalMidtermGrade+"</strong></td>"
+
+// Content to go inside of <tr> tags that will be appended to assTableBody
+var midtermTotalText = "<td><strong>Weighted Midterm Avg.</strong></td><td><strong>100</strong></td><td><strong>"+finalMTMark+"</strong></td>"
 var assignmentTotalText = "<td><strong>Assignment Avg.</strong></td><td><strong>100</strong></td><td><strong>"+finalAssGrade+"</strong></td>"
+
 appendElement("tr", midtermTotalText, assTableBody);
 appendElement("tr", assignmentTotalText, assTableBody);
