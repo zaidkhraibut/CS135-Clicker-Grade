@@ -3,7 +3,7 @@
 
   "name": "CS135 Website Extension",
   "description": "Add your clicker, weighted participation, and total assignment grades to the CS135 website.",
-  "version": "1.0.0.2",
+  "version": "1.0.0.3",
 
   "content_scripts": [{
     "js": ["content.js"],
